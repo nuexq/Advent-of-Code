@@ -1,6 +1,5 @@
 {
   "name": "aoc-25",
-  "module": "index.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
