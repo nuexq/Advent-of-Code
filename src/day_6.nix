@@ -18,18 +18,23 @@ let
   operations =
     filter (x: x != "") (strings.splitString " " (last cleanedInput));
 
-  part1 = foldl' (sum: idx:
+  problems = map (i:
     let
-      problem = foldl' (acc: num:
-        let
-          curr = strings.toInt (elemAt (elemAt numbers num) idx);
-          opertation = elemAt operations idx;
-        in if opertation == "+" then
-          curr + acc
-        else if num == 0 then
-          curr * 1
-        else
-          curr * acc) 0 (range 0 ((length numbers) - 1));
-    in problem + sum) 0 (range 0 ((length (elemAt numbers 0)) - 1));
+      col =
+        map (j: (elemAt (elemAt numbers j) i)) (range 0 ((length numbers) - 1));
+    in col) (range 0 ((length (elemAt numbers 0)) - 1));
+
+  part1 = foldl' (total: idx:
+    let
+      numbers = elemAt problems idx;
+      operation = elemAt operations idx;
+
+      ints = map strings.toInt numbers;
+
+      result = if operation == "+" then
+        builtins.foldl' (a: b: a + b) 0 ints
+      else
+        builtins.foldl' (a: b: a * b) 1 ints;
+    in total + result) 0 (range 0 (length problems - 1));
 
 in { inherit part1; }
